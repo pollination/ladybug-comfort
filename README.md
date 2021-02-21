@@ -1,2 +1,7 @@
-# ladybug-comfort
-💐 :beetle: :tired_face: :smile: :sweat: Ladybug comfort plugin for Pollination!
+# Pollination Ladybug Comfort plugin
+
+The ladybug-comfort plugin adds thermal comfort functions to Pollination.
+
+## Sources
+
+- `ladybug-comfort` Python package. [PyPI](https://pypi.org/project/ladybug-comfort/), [source](https://github.com/ladybug-tools/ladybug-comfort)
