@@ -72,6 +72,23 @@ class PmvMap(Function):
         'the PMV comfort model.', default='PMVParameter: [ppd_threshold:10]'
     )
 
+    run_period = Inputs.str(
+        description='An AnalysisPeriod string to set the start and end dates of the '
+        'analysis (eg. "6/21 to 9/21 between 8 and 16 @1"). If None, the analysis '
+        'will be for the entire result_sql run period.', default='None'
+    )
+
+    write_set_map = Inputs.str(
+        description='A switch to note whether the output temperature CSV should '
+        'record Operative Temperature or Standard Effective Temperature (SET). '
+        'SET is relatively intense to compute and so only recording Operative '
+        'Temperature can greatly reduce run time, particularly when air speeds '
+        'are low. However, SET accounts for all 6 PMV model inputs and so is a '
+        'more representative "feels-like" temperature for the PMV model.',
+        default='write-op-map',
+        spec={'type': 'string', 'enum': ['write-op-map', 'write-set-map']}
+    )
+
     @command
     def run_pmv_map(self):
         return 'ladybug-comfort map pmv result.sql enclosure_info.json ' \
@@ -79,7 +96,8 @@ class PmvMap(Function):
             '--ref-irradiance ref.ill --sun-up-hours sun-up-hours.txt ' \
             '--air-speed {{self.air_speed}} --met-rate {{self.met_rate}} ' \
             '--clo-value {{self.clo_value}} --solarcal-par {{self.solarcal_par}} ' \
-            '--comfort-par {{self.comfort_par}} --folder output'
+            '--comfort-par {{self.comfort_par}} --run-period {{self.run_period}} ' \
+            '--{{self.write_set_map}}  --folder output'
 
     result_folder = Outputs.folder(
         description='Folder containing all of the output CSV files.', path='output'
@@ -164,13 +182,20 @@ class AdaptiveMap(Function):
         'the Adaptive comfort model.', default='AdaptiveParameter: [standard:ASHRAE-55]'
     )
 
+    run_period = Inputs.str(
+        description='An AnalysisPeriod string to set the start and end dates of the '
+        'analysis (eg. "6/21 to 9/21 between 8 and 16 @1"). If None, the analysis '
+        'will be for the entire result_sql run period.', default='None'
+    )
+
     @command
     def run_adaptive_map(self):
         return 'ladybug-comfort map adaptive result.sql enclosure_info.json ' \
             'weather.epw --total-irradiance total.ill --direct-irradiance direct.ill ' \
             '--ref-irradiance ref.ill --sun-up-hours sun-up-hours.txt ' \
             '--air-speed {{self.air_speed}} --solarcal-par {{self.solarcal_par}} ' \
-            '--comfort-par {{self.comfort_par}} --folder output'
+            '--comfort-par {{self.comfort_par}} --run-period {{self.run_period}} ' \
+            '--folder output'
 
     result_folder = Outputs.folder(
         description='Folder containing all of the output CSV files.', path='output'
@@ -256,13 +281,20 @@ class UtciMap(Function):
         'the UTCI comfort model.', default='UTCIParameter: [cold:9] [heat:26]'
     )
 
+    run_period = Inputs.str(
+        description='An AnalysisPeriod string to set the start and end dates of the '
+        'analysis (eg. "6/21 to 9/21 between 8 and 16 @1"). If None, the analysis '
+        'will be for the entire result_sql run period.', default='None'
+    )
+
     @command
     def run_utci_map(self):
         return 'ladybug-comfort map utci result.sql enclosure_info.json ' \
             'weather.epw --total-irradiance total.ill --direct-irradiance direct.ill ' \
             '--ref-irradiance ref.ill --sun-up-hours sun-up-hours.txt ' \
             '--wind-speed {{self.wind_speed}} --solarcal-par {{self.solarcal_par}} ' \
-            '--comfort-par {{self.comfort_par}} --folder output'
+            '--comfort-par {{self.comfort_par}} --run-period {{self.run_period}} ' \
+            '--folder output'
 
     result_folder = Outputs.folder(
         description='Folder containing all of the output CSV files.', path='output'
