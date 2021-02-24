@@ -63,19 +63,19 @@ class PmvMap(Function):
 
     solarcal_par = Inputs.str(
         description='A SolarCalParameter string to customize the assumptions of '
-        'the SolarCal model.', default='SolarCalParameter: [posture:seated] '
-        '[sharp:135] [absorptivity:0.7] [emissivity:0.95]'
+        'the SolarCal model.', default='--posture seated --sharp 135 '
+        '--absorptivity 0.7 --emissivity 0.95'
     )
 
     comfort_par = Inputs.str(
         description='A PMVParameter string to customize the assumptions of '
-        'the PMV comfort model.', default='PMVParameter: [ppd_threshold:10]'
+        'the PMV comfort model.', default='--ppd-threshold 10'
     )
 
     run_period = Inputs.str(
         description='An AnalysisPeriod string to set the start and end dates of the '
         'analysis (eg. "6/21 to 9/21 between 8 and 16 @1"). If None, the analysis '
-        'will be for the entire result_sql run period.', default='None'
+        'will be for the entire result_sql run period.', default=''
     )
 
     write_set_map = Inputs.str(
@@ -94,9 +94,9 @@ class PmvMap(Function):
         return 'ladybug-comfort map pmv result.sql enclosure_info.json ' \
             'weather.epw --total-irradiance total.ill --direct-irradiance direct.ill ' \
             '--ref-irradiance ref.ill --sun-up-hours sun-up-hours.txt ' \
-            '--air-speed {{self.air_speed}} --met-rate {{self.met_rate}} ' \
-            '--clo-value {{self.clo_value}} --solarcal-par {{self.solarcal_par}} ' \
-            '--comfort-par {{self.comfort_par}} --run-period {{self.run_period}} ' \
+            '--air-speed "{{self.air_speed}}" --met-rate "{{self.met_rate}}" ' \
+            '--clo-value "{{self.clo_value}}" --solarcal-par "{{self.solarcal_par}}" ' \
+            '--comfort-par "{{self.comfort_par}}" --run-period "{{self.run_period}}" ' \
             '--{{self.write_set_map}}  --folder output'
 
     result_folder = Outputs.folder(
@@ -173,19 +173,19 @@ class AdaptiveMap(Function):
 
     solarcal_par = Inputs.str(
         description='A SolarCalParameter string to customize the assumptions of '
-        'the SolarCal model.', default='SolarCalParameter: [posture:seated] '
-        '[sharp:135] [absorptivity:0.7] [emissivity:0.95]'
+        'the SolarCal model.', default='--posture seated --sharp 135 '
+        '--absorptivity 0.7 --emissivity 0.95'
     )
 
     comfort_par = Inputs.str(
         description='An AdaptiveParameter string to customize the assumptions of '
-        'the Adaptive comfort model.', default='AdaptiveParameter: [standard:ASHRAE-55]'
+        'the Adaptive comfort model.', default='--standard ASHRAE-55'
     )
 
     run_period = Inputs.str(
         description='An AnalysisPeriod string to set the start and end dates of the '
         'analysis (eg. "6/21 to 9/21 between 8 and 16 @1"). If None, the analysis '
-        'will be for the entire result_sql run period.', default='None'
+        'will be for the entire result_sql run period.', default=''
     )
 
     @command
@@ -193,8 +193,8 @@ class AdaptiveMap(Function):
         return 'ladybug-comfort map adaptive result.sql enclosure_info.json ' \
             'weather.epw --total-irradiance total.ill --direct-irradiance direct.ill ' \
             '--ref-irradiance ref.ill --sun-up-hours sun-up-hours.txt ' \
-            '--air-speed {{self.air_speed}} --solarcal-par {{self.solarcal_par}} ' \
-            '--comfort-par {{self.comfort_par}} --run-period {{self.run_period}} ' \
+            '--air-speed "{{self.air_speed}}" --solarcal-par "{{self.solarcal_par}}" ' \
+            '--comfort-par "{{self.comfort_par}}" --run-period "{{self.run_period}}" ' \
             '--folder output'
 
     result_folder = Outputs.folder(
@@ -272,19 +272,19 @@ class UtciMap(Function):
 
     solarcal_par = Inputs.str(
         description='A SolarCalParameter string to customize the assumptions of '
-        'the SolarCal model.', default='SolarCalParameter: [posture:standing] '
-        '[sharp:135] [absorptivity:0.7] [emissivity:0.95]'
+        'the SolarCal model.', default='--posture seated --sharp 135 '
+        '--absorptivity 0.7 --emissivity 0.95'
     )
 
     comfort_par = Inputs.str(
         description='A UTCIParameter string to customize the assumptions of '
-        'the UTCI comfort model.', default='UTCIParameter: [cold:9] [heat:26]'
+        'the UTCI comfort model.', default='--cold 9 --heat 26'
     )
 
     run_period = Inputs.str(
         description='An AnalysisPeriod string to set the start and end dates of the '
         'analysis (eg. "6/21 to 9/21 between 8 and 16 @1"). If None, the analysis '
-        'will be for the entire result_sql run period.', default='None'
+        'will be for the entire result_sql run period.', default=''
     )
 
     @command
@@ -292,8 +292,8 @@ class UtciMap(Function):
         return 'ladybug-comfort map utci result.sql enclosure_info.json ' \
             'weather.epw --total-irradiance total.ill --direct-irradiance direct.ill ' \
             '--ref-irradiance ref.ill --sun-up-hours sun-up-hours.txt ' \
-            '--wind-speed {{self.wind_speed}} --solarcal-par {{self.solarcal_par}} ' \
-            '--comfort-par {{self.comfort_par}} --run-period {{self.run_period}} ' \
+            '--wind-speed "{{self.wind_speed}}" --solarcal-par "{{self.solarcal_par}}" ' \
+            '--comfort-par "{{self.comfort_par}}" --run-period "{{self.run_period}}" ' \
             '--folder output'
 
     result_folder = Outputs.folder(
@@ -320,4 +320,40 @@ class UtciMap(Function):
         'This can be used to understand not just whether conditions are '
         'acceptable but how uncomfortably hot or cold they are.',
         path='output/condition_intensity.csv'
+    )
+
+
+@dataclass
+class MapResultInfo(Function):
+    """Get a JSON that specifies the data type and units for comfort map outputs."""
+
+    comfort_model = Inputs.str(
+        description='Text for the comfort model of the thermal mapping '
+        'simulation. Choose from: pmv, adaptive, utci.',
+        spec={'type': 'string', 'enum': ['pmv', 'adaptive', 'utci']}
+    )
+
+    run_period = Inputs.str(
+        description='The AnalysisPeriod string that dictates the start and end of '
+        'the analysis (eg. "6/21 to 9/21 between 8 and 16 @1"). If unspecified, it '
+        'will be assumed results are for a full year.', default=''
+    )
+
+    qualifier = Inputs.str(
+        description='Text for any options used on the comfort map simulation that '
+        'change the output data type of results. For example, the write-set-map text '
+        'of the pmv map can be passed here to ensure the output of this command is '
+        'for SET instead of operative temperature.', default=''
+    )
+
+    @command
+    def map_results_information(self):
+        return 'ladybug-comfort map map-result-info {{self.comfort_model}} ' \
+            '--run-period "{{self.run_period}}" --qualifier "{{self.qualifier}}" ' \
+            '--output-file results_info.json'
+
+    results_info_file = Outputs.file(
+        description='A JSON that specifies the data type and units for comfort map '
+        'outputs. This JSON is needed by interfaces to correctly parse comfort map '
+        'results.', path='results_info.json'
     )
