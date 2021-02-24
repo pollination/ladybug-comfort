@@ -1,4 +1,4 @@
-from pollination.ladybug_comfort.map import PmvMap, AdaptiveMap, UtciMap
+from pollination.ladybug_comfort.map import PmvMap, AdaptiveMap, UtciMap, MapResultInfo
 from queenbee.plugin.function import Function
 
 
@@ -17,4 +17,10 @@ def test_adaptive_map():
 def test_utci_map():
     function = UtciMap().queenbee
     assert function.name == 'utci-map'
+    assert isinstance(function, Function)
+
+
+def test_map_result_info():
+    function = MapResultInfo().queenbee
+    assert function.name == 'map-result-info'
     assert isinstance(function, Function)
