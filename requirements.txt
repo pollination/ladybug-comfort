@@ -1,2 +1,2 @@
 pollination-dsl==0.12.2
-ladybug-comfort==0.12.10
+ladybug-comfort==0.12.11
