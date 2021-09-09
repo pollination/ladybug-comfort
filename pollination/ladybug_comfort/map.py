@@ -397,9 +397,8 @@ class Tcp(Function):
 
     @command
     def compute_tcp(self):
-        return 'ladybug-comfort map tcp {{self.condition_csv}} ' \
-            '{{self.enclosure_info}} --occ-schedule-json "{{self.occ_schedule_json}}" ' \
-            '--folder output'
+        return 'ladybug-comfort map tcp condition.csv enclosure_info.json ' \
+            '--occ-schedule-json occ_schedule.json --folder output'
 
     tcp = Outputs.file(
         description='A CSV that contains the Thermal Comfort Percent (TCP) for '
