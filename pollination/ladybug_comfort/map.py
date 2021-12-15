@@ -478,7 +478,7 @@ class AirMap(Function):
     def run_air_map(self):
         return 'ladybug-comfort map air result.sql enclosure_info.json weather.epw ' \
             '--run-period "{{self.run_period}}" --{{self.metric}} ' \
-            '--output-file longwave.csv'
+            '--output-file air.csv'
 
     air_map = Outputs.file(
         description='CSV file containing a map of air temperatures or humidity.',
