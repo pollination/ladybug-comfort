@@ -62,13 +62,14 @@ class AirSpeedJson(Function):
     )
 
     multiply_by = Inputs.float(
-        description='A number for the floor area of the building that the model '
-        'is a part of in m2. If 0, the model floor area will be used.', default=0.5
+        description='A number to denote a factor that EPW wind speeds should be '
+        'multipled by in order to represent air speeds at ground level.', default=0.5
     )
 
     indoor_air_speed = Inputs.str(
-        description='A number to denote a factor that EPW wind speeds should be '
-        'multipled by in order to represent air speeds at ground level.', default='0.1'
+        description='A single number for air speed in m/s or a string of a JSON array '
+        'with numbers that align with run period. This will be used for all '
+        'indoor comfort evaluation.', default='0.1'
     )
 
     run_period = Inputs.str(
