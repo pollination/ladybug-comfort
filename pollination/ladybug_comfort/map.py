@@ -557,10 +557,19 @@ class Tcp(Function):
         extensions=['json']
     )
 
+    schedule = Inputs.file(
+        description='An optional path to a CSV file to specify the relevant times '
+        'during which comfort should be evaluated. If specified, this will override '
+        'the occ-schedule-json for both indoor and outdoor conditions. Values '
+        'should be 0-1 separated by new line.',
+        path='schedule.txt', optional=True
+    )
+
     @command
     def compute_tcp(self):
         return 'ladybug-comfort map tcp condition.csv enclosure_info.json ' \
-            '--occ-schedule-json occ_schedule.json --folder output'
+            '--schedule schedule.txt --occ-schedule-json occ_schedule.json ' \
+            '--folder output'
 
     tcp = Outputs.file(
         description='A CSV that contains the Thermal Comfort Percent (TCP) for '
