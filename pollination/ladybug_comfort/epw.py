@@ -66,16 +66,19 @@ class AirSpeedJson(Function):
         'multipled by in order to represent air speeds at ground level.', default=0.5
     )
 
-    indoor_air_speed = Inputs.str(
-        description='A single number for air speed in m/s or a string of a JSON array '
-        'with numbers that align with run period. This will be used for all '
-        'indoor comfort evaluation.', default='0.1'
+    indoor_air_speed = Inputs.file(
+        description='The path to a CSV file containing a single number for air speed '
+        'in m/s or multiple numbers (with one value per row) that align with the '
+        'length of the run-period. This will be used for all '
+        'indoor comfort evaluation.', path='in_speed.txt', optional=True
     )
 
-    outdoor_air_speed = Inputs.str(
-        description='A single number for air speed in m/s or a string of a JSON '
-        'array with numbers that align with the run-period. If None, the EPW wind '
-        'speed times the multiply-by will be used.', default='None'
+    outdoor_air_speed = Inputs.file(
+        description='The path to a CSV file containing a single number for air speed '
+        'in m/s or multiple numbers (with one value per row) that align with the '
+        'length of the run-period. If None, the resulting air speed JSON will use '
+        'the EPW wind speed times the multiply-by value.',
+        path='out_speed.txt', optional=True
     )
 
     run_period = Inputs.str(
@@ -87,9 +90,8 @@ class AirSpeedJson(Function):
     @command
     def get_air_speed_json(self):
         return 'ladybug-comfort epw air-speed-json weather.epw enclosure_info.json ' \
-            '--multiply-by {{self.multiply_by}} --indoor-air-speed ' \
-            '"{{self.indoor_air_speed}}" --outdoor-air-speed ' \
-            '"{{self.outdoor_air_speed}}" --run-period "{{self.run_period}}" ' \
+            '--multiply-by {{self.multiply_by}} --indoor-air-speed in_speed.txt ' \
+            '--outdoor-air-speed out_speed.txt --run-period "{{self.run_period}}" ' \
             '--output-file air_speed.json'
 
     air_speeds = Outputs.file(
