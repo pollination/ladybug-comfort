@@ -32,16 +32,18 @@ class PmvMtx(Function):
         'for each row of the matrix in m/s.', path='air_speed.json', extensions=['json']
     )
 
-    met_rate = Inputs.str(
-        description='A single number for metabolic rate in met or a string of a '
-        'JSON array with numbers that align with the result-sql reporting period.',
-        default='1.1'
+    met_rate = Inputs.file(
+        description='The path to a CSV file containing a single number for metabolic '
+        'rate in met or multiple numbers (with one value per row) that align with the '
+        'width of the input matrices. If unspecified, than 1.1 will be used.',
+        path='met.txt', optional=True
     )
 
-    clo_value = Inputs.str(
-        description='A single number for clothing level in clo or a string of a JSON '
-        'array with numbers that align with the result-sql reporting period.',
-        default='0.7'
+    clo_value = Inputs.file(
+        description='The path to a CSV file containing a single number for clothing '
+        'level in clo or multiple numbers (with one value per row) that align with the '
+        'width of the input matrices. If unspecified, than 0.7 will be used.',
+        path='clo.txt', optional=True
     )
 
     comfort_par = Inputs.str(
@@ -64,8 +66,8 @@ class PmvMtx(Function):
     def run_pmv_mtx(self):
         return 'ladybug-comfort mtx pmv air_temperature.csv rel_humidity.csv ' \
             '--rad-temperature-mtx rad_temperature.csv --rad-delta-mtx rad_delta.csv ' \
-            '--air-speed-json air_speed.json --met-rate "{{self.met_rate}}" ' \
-            '--clo-value "{{self.clo_value}}" --comfort-par "{{self.comfort_par}}" ' \
+            '--air-speed-json air_speed.json --met-rate met.txt ' \
+            '--clo-value clo.txt --comfort-par "{{self.comfort_par}}" ' \
             '--{{self.write_set_map}} --folder output'
 
     result_folder = Outputs.folder(
