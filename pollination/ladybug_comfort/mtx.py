@@ -194,6 +194,13 @@ class UtciMtx(Function):
         path='wind_speed.json', extensions=['json']
     )
 
+    air_speed_mtx = Inputs.file(
+        description='A CSV file with with a matrix of air speed values in m/s. '
+        'Note that these values are not meteorological and should be AT HUMAN '
+        'SUBJECT LEVEL. If specified, this overrides the wind-speed-json input.',
+        path='air_speed.csv', extensions=['csv']
+    )
+
     comfort_par = Inputs.str(
         description='A UTCIParameter string to customize the assumptions of '
         'the UTCI comfort model.', default='--cold 9 --heat 26'
@@ -203,8 +210,8 @@ class UtciMtx(Function):
     def run_utci_mtx(self):
         return 'ladybug-comfort mtx utci air_temperature.csv rel_humidity.csv ' \
             '--rad-temperature-mtx rad_temperature.csv --rad-delta-mtx rad_delta.csv ' \
-            '--wind-speed-json wind_speed.json --comfort-par "{{self.comfort_par}}" ' \
-            '--folder output'
+            '--wind-speed-json wind_speed.json --air-speed-mtx air_speed.csv ' \
+            '--comfort-par "{{self.comfort_par}}" --folder output'
 
     result_folder = Outputs.folder(
         description='Folder containing all of the output CSV files.', path='output'
