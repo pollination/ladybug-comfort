@@ -198,7 +198,7 @@ class UtciMtx(Function):
         description='A CSV file with with a matrix of air speed values in m/s. '
         'Note that these values are not meteorological and should be AT HUMAN '
         'SUBJECT LEVEL. If specified, this overrides the wind-speed-json input.',
-        path='air_speed.csv', extensions=['csv']
+        path='air_speed.csv', extensions=['csv'], optional=True
     )
 
     comfort_par = Inputs.str(
