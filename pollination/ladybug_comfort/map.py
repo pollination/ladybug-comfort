@@ -591,6 +591,11 @@ class MapResultInfo(Function):
         'outputs.', path='results_info.json'
     )
 
+    viz_config_file = Outputs.file(
+        description='A JSON that specifies configurations for VTK visualizations.',
+        path='config.json'
+    )
+
     temperature_info = Outputs.file(
         description='A JSON that specifies the data type and units for temperature map '
         'results.', path='output/temperature.json'
