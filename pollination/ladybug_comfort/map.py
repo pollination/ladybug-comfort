@@ -629,6 +629,21 @@ class MapResultInfo(Function):
         'condition intensity map results.', path='output/condition_intensity.json'
     )
 
+    tcp_vis_metadata = Outputs.file(
+        description='A JSON that specifies the visualization metadata for the '
+        'TCP results.', path='output/TCP.json'
+    )
+
+    hsp_vis_metadata = Outputs.file(
+        description='A JSON that specifies the visualization metadata for the '
+        'HSP results.', path='output/HSP.json'
+    )
+
+    csp_vis_metadata = Outputs.file(
+        description='A JSON that specifies the visualization metadata for the '
+        'CSP results.', path='output/CSP.json'
+    )
+
 
 @dataclass
 class Tcp(Function):
