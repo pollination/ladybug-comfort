@@ -209,9 +209,11 @@ class UtciMtx(Function):
     plain_text = Inputs.str(
         description='Flag to note whether the output should be formatted as a '
         'plain text CSV or whether it should be formatted as a binary numpy '
-        'array.', default='plain-text',
-        spec={'type': 'string',
-              'enum': ['plain-text', 'binary']}
+        'array. Using binary will decrease the file size, however, to read the '
+        'contents of the file you have to pass it through numpy, whereas the '
+        'plain text file can be opened in a text editor.',
+        default='plain-text',
+        spec={'type': 'string', 'enum': ['plain-text', 'binary']}
     )
 
     @command
