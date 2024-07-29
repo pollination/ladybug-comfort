@@ -291,7 +291,7 @@ class UtciMap(Function):
         'will be for the entire result_sql run period.', default=''
     )
 
-    plain_text = Inputs.str(
+    output_format = Inputs.str(
         description='Flag to note whether the output should be formatted as a '
         'plain text CSV or whether it should be formatted as a binary numpy '
         'array. Using binary will decrease the file size, however, to read the '
@@ -308,7 +308,7 @@ class UtciMap(Function):
             '--ref-irradiance ref.ill --sun-up-hours sun-up-hours.txt ' \
             '--wind-speed "{{self.wind_speed}}" --solarcal-par ' \
             '"{{self.solarcal_par}}" --comfort-par "{{self.comfort_par}}" ' \
-            '--run-period "{{self.run_period}}" --{{self.plain_text}} --folder output'
+            '--run-period "{{self.run_period}}" --{{self.output_format}} --folder output'
 
     result_folder = Outputs.folder(
         description='Folder containing all of the output CSV files.', path='output'
@@ -474,7 +474,7 @@ class ShortwaveMrtMap(Function):
         spec={'type': 'string', 'enum': ['is-indirect', 'indirect-is-total']}
     )
 
-    plain_text = Inputs.str(
+    output_format = Inputs.str(
         description='Flag to note whether the output should be formatted as a '
         'plain text CSV or whether it should be formatted as a binary numpy '
         'array. Using binary will decrease the file size, however, to read the '
@@ -491,7 +491,7 @@ class ShortwaveMrtMap(Function):
             '--transmittance-contribs dyn_shade --trans-schedule-json ' \
             'trans_schedules.json --solarcal-par "{{self.solarcal_par}}" ' \
             '--run-period "{{self.run_period}}" --{{self.indirect_is_total}} ' \
-            '--{{self.plain_text}} --output-file shortwave.csv'
+            '--{{self.output_format}} --output-file shortwave.csv'
 
     shortwave_mrt_map = Outputs.file(
         description='CSV file containing a map of shortwave MRT deltas.',
@@ -536,7 +536,7 @@ class LongwaveMrtMap(Function):
         'will be annual.', default=''
     )
 
-    plain_text = Inputs.str(
+    output_format = Inputs.str(
         description='Flag to note whether the output should be formatted as a '
         'plain text CSV or whether it should be formatted as a binary numpy '
         'array. Using binary will decrease the file size, however, to read the '
@@ -550,7 +550,7 @@ class LongwaveMrtMap(Function):
     def run_longwave_map(self):
         return 'ladybug-comfort map longwave-mrt result.sql view_factors.csv ' \
             'view_factors.mod enclosure_info.json weather.epw ' \
-            '--run-period "{{self.run_period}}" --{{self.plain_text}} ' \
+            '--run-period "{{self.run_period}}" --{{self.output_format}} ' \
             '--output-file longwave.csv'
 
     longwave_mrt_map = Outputs.file(
@@ -594,7 +594,7 @@ class AirMap(Function):
         spec={'type': 'string', 'enum': ['air-temperature', 'relative-humidity']}
     )
 
-    plain_text = Inputs.str(
+    output_format = Inputs.str(
         description='Flag to note whether the output should be formatted as a '
         'plain text CSV or whether it should be formatted as a binary numpy '
         'array. Using binary will decrease the file size, however, to read the '
@@ -608,7 +608,7 @@ class AirMap(Function):
     def run_air_map(self):
         return 'ladybug-comfort map air result.sql enclosure_info.json weather.epw ' \
             '--run-period "{{self.run_period}}" --{{self.metric}} ' \
-            '--{{self.plain_text}} --output-file air.csv'
+            '--{{self.output_format}} --output-file air.csv'
 
     air_map = Outputs.file(
         description='CSV file containing a map of air temperatures or humidity.',

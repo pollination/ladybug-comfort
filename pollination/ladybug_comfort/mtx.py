@@ -206,7 +206,7 @@ class UtciMtx(Function):
         'the UTCI comfort model.', default='--cold 9 --heat 26'
     )
 
-    plain_text = Inputs.str(
+    output_format = Inputs.str(
         description='Flag to note whether the output should be formatted as a '
         'plain text CSV or whether it should be formatted as a binary numpy '
         'array. Using binary will decrease the file size, however, to read the '
@@ -221,7 +221,7 @@ class UtciMtx(Function):
         return 'ladybug-comfort mtx utci air_temperature.csv rel_humidity.csv ' \
             '--rad-temperature-mtx rad_temperature.csv --rad-delta-mtx rad_delta.csv ' \
             '--wind-speed-json wind_speed.json --air-speed-mtx air_speed.csv ' \
-            '--comfort-par "{{self.comfort_par}}" --{{self.plain_text}} ' \
+            '--comfort-par "{{self.comfort_par}}" --{{self.output_format}} ' \
             '--folder output'
 
     result_folder = Outputs.folder(
