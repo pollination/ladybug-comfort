@@ -62,13 +62,24 @@ class PmvMtx(Function):
         spec={'type': 'string', 'enum': ['write-op-map', 'write-set-map']}
     )
 
+    output_format = Inputs.str(
+        description='Flag to note whether the output should be formatted as a '
+        'plain text CSV or whether it should be formatted as a binary numpy '
+        'array. Using binary will decrease the file size, however, to read the '
+        'contents of the file you have to pass it through numpy, whereas the '
+        'plain text file can be opened in a text editor.',
+        default='plain-text',
+        spec={'type': 'string', 'enum': ['plain-text', 'binary']}
+    )
+
     @command
     def run_pmv_mtx(self):
         return 'ladybug-comfort mtx pmv air_temperature.csv rel_humidity.csv ' \
             '--rad-temperature-mtx rad_temperature.csv --rad-delta-mtx rad_delta.csv ' \
             '--air-speed-json air_speed.json --met-rate met.txt ' \
             '--clo-value clo.txt --comfort-par "{{self.comfort_par}}" ' \
-            '--{{self.write_set_map}} --folder output'
+            '--{{self.write_set_map}} --{{self.output_format}} ' \
+            '--folder output'
 
     result_folder = Outputs.folder(
         description='Folder containing all of the output CSV files.', path='output'
@@ -132,12 +143,22 @@ class AdaptiveMtx(Function):
         'the Adaptive comfort model.', default='--standard ASHRAE-55'
     )
 
+    output_format = Inputs.str(
+        description='Flag to note whether the output should be formatted as a '
+        'plain text CSV or whether it should be formatted as a binary numpy '
+        'array. Using binary will decrease the file size, however, to read the '
+        'contents of the file you have to pass it through numpy, whereas the '
+        'plain text file can be opened in a text editor.',
+        default='plain-text',
+        spec={'type': 'string', 'enum': ['plain-text', 'binary']}
+    )
+
     @command
     def run_adaptive_mtx(self):
         return 'ladybug-comfort mtx adaptive air_temperature.csv prevailing.csv ' \
             '--rad-temperature-mtx rad_temperature.csv --rad-delta-mtx rad_delta.csv ' \
             '--air-speed-json air_speed.json --comfort-par "{{self.comfort_par}}" ' \
-            '--folder output'
+            '--{{self.output_format}} --folder output'
 
     result_folder = Outputs.folder(
         description='Folder containing all of the output CSV files.', path='output'

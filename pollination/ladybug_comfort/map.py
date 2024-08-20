@@ -387,11 +387,22 @@ class IrradianceContribMap(Function):
         'with the irradiance.'
     )
 
+    output_format = Inputs.str(
+        description='Flag to note whether the output should be formatted as a '
+        'plain text CSV or whether it should be formatted as a binary numpy '
+        'array. Using binary will decrease the file size, however, to read the '
+        'contents of the file you have to pass it through numpy, whereas the '
+        'plain text file can be opened in a text editor.',
+        default='plain-text',
+        spec={'type': 'string', 'enum': ['plain-text', 'binary']}
+    )
+
     @command
     def run_irradiance_contrib(self):
         return 'ladybug-comfort map irradiance-contrib result.sql direct_spec.ill ' \
             'indirect_spec.ill ref_spec.ill indirect_diff.ill ref_diff.ill ' \
-            'sun-up-hours.txt --aperture-id "{{self.aperture_id}}" --folder output'
+            'sun-up-hours.txt --aperture-id "{{self.aperture_id}}" ' \
+            '--{{self.output_format}} --folder output'
 
     result_folder = Outputs.folder(
         description='Folder containing all of the output .ill files.', path='output'
