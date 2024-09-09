@@ -1,5 +1,6 @@
 from pollination.ladybug_comfort.map import PmvMap, AdaptiveMap, UtciMap, \
-    ShortwaveMrtMap, LongwaveMrtMap, AirMap, MapResultInfo, Tcp
+    ShortwaveMrtMap, LongwaveMrtMap, AirMap, MapResultInfo, Tcp, \
+    IrradianceContribMap
 from queenbee.plugin.function import Function
 
 
@@ -48,4 +49,10 @@ def test_map_result_info():
 def test_tcp():
     function = Tcp().queenbee
     assert function.name == 'tcp'
+    assert isinstance(function, Function)
+
+
+def test_irradiance_contrib_map():
+    function = IrradianceContribMap().queenbee
+    assert function.name == 'irradiance-contrib-map'
     assert isinstance(function, Function)
